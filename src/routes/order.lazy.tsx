@@ -138,7 +138,7 @@ function Order() {
           </div>
         )}
       </form>
-      {loading ? <h2>LOADING …</h2> : <Cart checkout={checkout} cart={cart} />}
+      {loading ? <h2>LOADING …</h2> : <Cart checkout={() => void checkout()} cart={cart} />}
     </div>
   );
 }
