@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../contexts";
 import Cart from "../Cart";
 import Pizza from "../Pizza";
+import type { Pizza as PizzaType, PizzaSize } from "../APIResponsesTypes";
 import { createLazyFileRoute } from "@tanstack/react-router";
 
 const intl = new Intl.NumberFormat("en-US", {
@@ -14,29 +15,28 @@ export const Route = createLazyFileRoute("/order")({
 });
 
 function Order() {
-  const [pizzaTypes, setPizzaTypes] = useState([]);
+  const [pizzaTypes, setPizzaTypes] = useState<PizzaType[]>([]);
   const [pizzaType, setPizzaType] = useState("pepperoni");
-  const [pizzaSize, setPizzaSize] = useState("M");
+  const [pizzaSize, setPizzaSize] = useState<PizzaSize>("M");
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useContext(CartContext);
 
-  let price, selectedPizza;
+  let price: string | undefined;
+  let selectedPizza: PizzaType | undefined;
   if (!loading) {
     selectedPizza = pizzaTypes.find((pizza) => pizzaType === pizza.id);
-    price = intl.format(
-      selectedPizza.sizes ? selectedPizza.sizes[pizzaSize] : "",
-    );
+    price = selectedPizza
+      ? intl.format(selectedPizza.sizes[pizzaSize])
+      : undefined;
   }
 
   useEffect(() => {
-    fetchPizzaTypes();
+    void fetchPizzaTypes();
   }, []);
 
   async function fetchPizzaTypes() {
-    await new Promise((resolve) => setTimeout(resolve, 3000)); // remove this later, just to show you the loading state
-
     const pizzasRes = await fetch("/api/pizzas");
-    const pizzasJson = await pizzasRes.json();
+    const pizzasJson = (await pizzasRes.json()) as PizzaType[];
     setPizzaTypes(pizzasJson);
     setLoading(false);
   }
@@ -64,6 +64,9 @@ function Order() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          if (!selectedPizza || !price) {
+            return;
+          }
           setCart([...cart, { pizza: selectedPizza, size: pizzaSize, price }]);
         }}
       >
@@ -84,10 +87,10 @@ function Order() {
           </div>
           <div>
             <label htmlFor="pizza-size">Pizza Size</label>
-            <div onChange={(e) => setPizzaSize(e.target.value)}>
+            <div>
               <span>
                 <input
-                  //   onChange={(e) => setPizzaSize(e.target.value)}
+                   onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
                   checked={pizzaSize === "S"}
                   type="radio"
                   name="pizza-size"
@@ -98,7 +101,7 @@ function Order() {
               </span>
               <span>
                 <input
-                  //   onChange={(e) => setPizzaSize(e.target.value)}
+                  onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
                   checked={pizzaSize === "M"}
                   type="radio"
                   name="pizza-size"
@@ -109,7 +112,7 @@ function Order() {
               </span>
               <span>
                 <input
-                  //   onChange={(e) => setPizzaSize(e.target.value)}
+                  onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
                   checked={pizzaSize === "L"}
                   type="radio"
                   name="pizza-size"
@@ -122,7 +125,7 @@ function Order() {
           </div>
           <button type="submit">Add to Cart</button>
         </div>
-        {loading ? (
+        {loading || !selectedPizza ? (
           <h3>Loading...</h3>
         ) : (
           <div className="order-pizza">

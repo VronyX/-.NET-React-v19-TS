@@ -150,7 +150,7 @@ export const routeTree = rootRoute
       "filePath": "contact.lazy.jsx"
     },
     "/order": {
-      "filePath": "order.lazy.jsx"
+      "filePath": "order.lazy.tsx"
     },
     "/past": {
       "filePath": "past.lazy.tsx"
