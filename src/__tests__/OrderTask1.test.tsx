@@ -21,17 +21,20 @@ test("Add to cart button append item to cart", async () => {
   fetchMocker.mockResponse(JSON.stringify(mockPizzas));
 
   const setCartMock = vi.fn();
-
+  const OrderRoute = Route.options.component;
+  if (!OrderRoute) {
+    throw new Error("order route has no component");
+  }
   render(
     <CartContext.Provider value={[[], setCartMock]}>
-      <Route.options.component />
-    </CartContext.Provider>
+      <OrderRoute />
+    </CartContext.Provider>,
   );
 
   const pizzaOption = await screen.findByRole(
     "option",
     { name: "The Pepperoni Pizza" },
-    { timeout: 5000 }
+    { timeout: 5000 },
   );
   expect(pizzaOption).toBeDefined();
 
