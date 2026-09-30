@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
+import type { PastOrder, PastOrderDetail } from "../APIResponsesTypes";
 import getPastOrders from "../api/getPastOrders";
 import getPastOrder from "../api/getPastOrder";
 import Modal from "../Modal";
@@ -25,14 +26,14 @@ function ErrorBoundaryWrappedPastOrderRoutes() {
 
 function PastOrdersRoute() {
   const [page, setPage] = useState(1);
-  const [focusedOrder, setFocusedOrder] = useState();
-  const { isLoading, data } = useQuery({
+  const [focusedOrder, setFocusedOrder] = useState<number>();
+  const { isLoading, data } = useQuery<PastOrder[]>({
     queryKey: ["past-orders", page],
     queryFn: () => getPastOrders(page),
     staleTime: 30000,
   });
 
-  const { isLoading: isLoadingPastOrder, data: pastOrderData } = useQuery({
+  const { data: pastOrderData } = useQuery<PastOrderDetail>({
     queryKey: ["past-order", focusedOrder],
     queryFn: () => getPastOrder(focusedOrder),
     enabled: !!focusedOrder,
@@ -45,6 +46,9 @@ function PastOrdersRoute() {
         <h2>LOADING …</h2>
       </div>
     );
+  }
+  if (!data) {
+    throw new Error("Past orders could not be loaded");
   }
   return (
     <div className="past-orders">
@@ -82,7 +86,7 @@ function PastOrdersRoute() {
       {focusedOrder ? (
         <Modal>
           <h2>Order #{focusedOrder}</h2>
-          {!isLoadingPastOrder ? (
+          {pastOrderData ? (
             <table>
               <thead>
                 <tr>
@@ -112,7 +116,7 @@ function PastOrdersRoute() {
           ) : (
             <p>Loading …</p>
           )}
-          <button onClick={() => setFocusedOrder()}>Close</button>
+          <button onClick={() => setFocusedOrder(undefined)}>Close</button>
         </Modal>
       ) : null}
     </div>

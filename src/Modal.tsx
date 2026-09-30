@@ -1,9 +1,9 @@
 // basically stolen from the React docs
 import { useEffect, useRef } from "react";
-import type { ReactElement } from "react";
+import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
-const Modal = ({ children }: { children: ReactElement }) => {
+const Modal = ({ children }: { children: ReactNode }) => {
   const elRef = useRef<HTMLDivElement | null>(null);
   if (!elRef.current) {
     elRef.current = document.createElement("div");
