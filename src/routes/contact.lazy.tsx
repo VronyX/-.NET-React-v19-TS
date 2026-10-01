@@ -3,6 +3,8 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import postContact from "../api/postContact";
 
+const sizeInputClass = "w-125 p-2 border-2 border-[#999] rounded-[5px] my-3.75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+
 export const Route = createLazyFileRoute("/contact")({
   component: ContactRoute,
 });
@@ -29,13 +31,13 @@ function ContactRoute() {
     <div className="contact">
       <h2>Contact</h2>
       {mutation.isSuccess ? (
-        <h3>Submitted!</h3>
+        <h3 className="font-pacifico text-secondary text-center m-12.5 text-7.5 font-normal">Submitted!</h3>
       ) : (
-        <form onSubmit={mutation.mutate}>
-          <input name="name" placeholder="Name" />
-          <input type="email" name="email" placeholder="Email" />
-          <textarea placeholder="Message" name="message"></textarea>
-          <button>Submit</button>
+        <form className="flex flex-col items-center" onSubmit={mutation.mutate}>
+          <input className={`${sizeInputClass} disabled:border-[#999]`} name="name" placeholder="Name" />
+          <input className={`${sizeInputClass} disabled:border-[#999]`} type="email" name="email" placeholder="Email" />
+          <textarea className={`${sizeInputClass} min-h-50`} placeholder="Message" name="message"></textarea>
+          <button className="inline-block cursor-pointer rounded-[5px] border border-primary bg-transparent px-3.75 py-1.25 font-pacifico text-[20px] text-primary hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:bg-border disabled:opacity-50">Submit</button>
         </form>
       )}
     </div>
