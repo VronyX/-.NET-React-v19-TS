@@ -29,7 +29,9 @@ export default function Cart({ cart, checkout }: Props) {
         ))}
       </ul>
       <p>Total: {intl.format(total)}</p>
-      <button onClick={checkout}>Checkout</button>
+      <button className="p-10" onClick={checkout}>
+        Checkout
+      </button>
     </div>
   );
 }
