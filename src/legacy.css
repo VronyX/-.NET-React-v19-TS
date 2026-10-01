@@ -285,7 +285,7 @@ button:disabled {
   margin: 15px 0;
 } */
 
-.index h1 {
+/* .index h1 {
   color: var(--primary);
   font-family: var(--font);
   font-weight: normal;
@@ -329,7 +329,7 @@ button:disabled {
 
 .index li a {
   margin-bottom: 10px;
-}
+} */
 
 .past-orders {
   min-height: 650px;
