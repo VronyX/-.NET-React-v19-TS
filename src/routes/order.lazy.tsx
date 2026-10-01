@@ -63,7 +63,7 @@ function Order() {
   }
 
   return (
-    <div className="mx-auto grid max-w-325 grid-cols-1 gap-12.5 lg:grid-cols-[2fr_1fr]">
+    <div className="mx-auto grid max-w-325 grid-cols-1 gap-7.5 max-w-175 my-30 mx-auto lg:grid-cols-[2fr_1fr]">
       <div className="w-full lg:ml-[5%]">
         <h2>Create Order</h2>
         <form
