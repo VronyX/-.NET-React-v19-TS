@@ -92,7 +92,7 @@ nav > a {
   src: url("/public/Pacifico-Regular.ttf");
 }
 
-h2 {
+/* h2 {
   font-family: var(--font);
   font-size: 40px;
   line-height: auto;
@@ -116,7 +116,7 @@ h2::after {
   background-repeat: repeat;
   background-size: 30px 30px;
   background-position: top left;
-}
+} */
 
 /* .order {
   width: 100%;
@@ -208,7 +208,7 @@ form > div > div > label {
   justify-content: space-between;
 } */
 
-button,
+/* button,
 .index li a {
   border: 1px solid var(--primary);
   background-color: transparent;
@@ -224,7 +224,7 @@ button,
 button:disabled {
   opacity: 0.5;
   background-color: #ccc;
-}
+} */
 
 .order-pizza {
   width: 100%;
@@ -421,7 +421,7 @@ td img {
   text-decoration: underline;
 } */
 
-.contact form {
+/* .contact form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -458,4 +458,4 @@ td img {
   margin: 50px;
   font-weight: normal;
   font-size: 30px;
-}
+} */
