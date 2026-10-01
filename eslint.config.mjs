@@ -7,6 +7,7 @@ import pluginQuery from "@tanstack/eslint-plugin-query";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
+  { ignores: ["dist/"] },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
