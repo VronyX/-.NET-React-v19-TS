@@ -3,7 +3,7 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import postContact from "../api/postContact";
 
-const sizeInputClass = "w-125 p-2 border-2 border-[#999] rounded-[5px] my-3.75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+const sizeInputClass = "w-125 p-2 border-2 border-[#999] rounded-[5px] my-3.75 focus:border-primary focus:outline-none disabled:bg-[#999]";
 
 export const Route = createLazyFileRoute("/contact")({
   component: ContactRoute,
