@@ -17,7 +17,7 @@ export default function Cart({ cart, checkout }: Props) {
     total += current.pizza.sizes[current.size];
   }
   return (
-    <div className="cart">
+    <div className="border-l border-border leading-normal text-center p-3.75">
       <h2>Cart</h2>
       <ul>
         {cart.map((item, index) => (
@@ -28,8 +28,11 @@ export default function Cart({ cart, checkout }: Props) {
           </li>
         ))}
       </ul>
-      <p>Total: {intl.format(total)}</p>
-      <button className="p-10" onClick={checkout}>
+      <p className="my-3.75">Total: {intl.format(total)}</p>
+      <button
+        className="inline-block cursor-pointer rounded-[5px] border border-primary bg-transparent px-3.75 py-1.25 font-pacifico text-[20px] text-primary hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:bg-border disabled:opacity-50"
+        onClick={checkout}
+      >
         Checkout
       </button>
     </div>

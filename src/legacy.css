@@ -274,7 +274,7 @@ button:disabled {
   gap: 50px;
 }
 
-.cart {
+/* .cart {
   border-left: 1px solid var(--border);
   line-height: 1.5;
   text-align: center;
@@ -283,7 +283,7 @@ button:disabled {
 
 .cart p {
   margin: 15px 0;
-}
+} */
 
 .index h1 {
   color: var(--primary);
