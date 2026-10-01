@@ -238,7 +238,7 @@ button:disabled {
   align-items: center;
 } */
 
-.pizza-of-the-day {
+/* .pizza-of-the-day {
   border-top: 1px solid var(--border);
   margin-top: 50px;
   width: 100%;
@@ -264,7 +264,7 @@ button:disabled {
   margin-right: 30px;
   line-height: 2;
   text-align: center;
-}
+} */
 
 .order-page {
   max-width: 1300px;
