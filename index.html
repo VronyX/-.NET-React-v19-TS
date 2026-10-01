@@ -8,7 +8,10 @@
   </head>
 
   <body>
-    <div id="modal"></div>
+    <div
+      class="fixed inset-0 z-10 flex items-center justify-center bg-black/90 empty:hidden"
+      id="modal"
+    ></div>
     <!-- div dengan id="root" akan menjadi tempat untuk merender komponen React. Semisal
      tidak tertampil di browser, maka kemungkinan ada kesalahan pada kode React yang 
      menyebabkan error sehingga tidak bisa dirender dan muncul tulisan "not rendered".

@@ -331,7 +331,7 @@ button:disabled {
   margin-bottom: 10px;
 } */
 
-.past-orders {
+/* .past-orders {
   min-height: 650px;
   max-width: 900px;
   width: 90%;
@@ -382,7 +382,7 @@ tbody tr:last-of-type {
   font-family: var(--font);
   color: var(--primary);
   font-size: 20px;
-}
+} */
 
 #modal {
   background-color: rgba(0, 0, 0, 0.9);
