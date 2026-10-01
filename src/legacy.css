@@ -118,12 +118,12 @@ h2::after {
   background-position: top left;
 }
 
-.order {
+/* .order {
   width: 100%;
   margin-left: 5%;
-}
+} */
 
-form div {
+/* form div {
   margin: 10px 0;
   text-align: center;
 }
@@ -180,7 +180,7 @@ form > div > div > label {
   font-size: 20px;
   color: var(--secondary);
   margin-bottom: 10px;
-}
+} */
 
 /* .pizza {
   line-height: 1.5;
@@ -202,11 +202,11 @@ form > div > div > label {
   margin-bottom: 5px;
 } */
 
-.order form {
+/* .order form {
   display: flex;
 
   justify-content: space-between;
-}
+} */
 
 button,
 .index li a {
@@ -411,7 +411,7 @@ td img {
   width: 50px;
 }
 
-.error-boundary {
+/* .error-boundary {
   min-height: 400px;
   text-align: center;
 }
@@ -419,7 +419,7 @@ td img {
 .error-boundary a {
   color: var(--primary);
   text-decoration: underline;
-}
+} */
 
 .contact form {
   display: flex;
