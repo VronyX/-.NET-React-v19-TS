@@ -2,7 +2,7 @@ import { Component } from "react";
 import type { ErrorInfo, ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 
-class ErrorBoundary extends Component<{children: ReactNode }> {
+class ErrorBoundary extends Component<{ children: ReactNode }> {
   state = { hasError: false };
   static getDerivedStateFromError() {
     return { hasError: true };
@@ -13,10 +13,13 @@ class ErrorBoundary extends Component<{children: ReactNode }> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="error-boundary">
+        <div className="min-h-100 text-center">
           <h2>Uh oh!</h2>
           <p>
-            There was an error with this listing. <Link to="/">Click here</Link>{" "}
+            There was an error with this listing.{" "}
+            <Link className="text-primary underline hover:no-underline" to="/">
+              Click here
+            </Link>{" "}
             to back to the home page.
           </p>
         </div>
@@ -28,4 +31,3 @@ class ErrorBoundary extends Component<{children: ReactNode }> {
 }
 
 export default ErrorBoundary;
-
