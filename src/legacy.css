@@ -266,13 +266,13 @@ button:disabled {
   text-align: center;
 } */
 
-.order-page {
+/* .order-page {
   max-width: 1300px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 50px;
-}
+} */
 
 /* .cart {
   border-left: 1px solid var(--border);
