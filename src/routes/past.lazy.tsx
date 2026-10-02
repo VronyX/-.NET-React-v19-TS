@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { skipToken } from "@reduxjs/toolkit/query/react";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import getPastOrders from "../api/getPastOrders";
 import Modal from "../Modal";
 import ErrorBoundary from "../ErrorBoundary";
-import { useGetPastOrderQuery } from "../api/pizzaApi";
+import { useGetPastOrderQuery, useGetPastOrdersQuery } from "../api/pizzaApi";
 
 const sizeTDClass = "py-3 px-3.75 text-center";
 
@@ -29,22 +27,20 @@ function ErrorBoundaryWrappedPastOrderRoutes() {
 function PastOrdersRoute() {
   const [page, setPage] = useState(1);
   const [focusedOrder, setFocusedOrder] = useState<number>();
-  const { isLoading, data } = useQuery({
-    queryKey: ["past-orders", page],
-    queryFn: () => getPastOrders(page),
-    staleTime: 30000,
-  });
+  const { isFetching, currentData } = useGetPastOrdersQuery({ page });
 
-  const { data: pastOrderData } = useGetPastOrderQuery(focusedOrder ?? skipToken);
+  const { data: pastOrderData } = useGetPastOrderQuery(
+    focusedOrder ?? skipToken,
+  );
 
-  if (isLoading) {
+  if (isFetching) {
     return (
       <div className="min-h-162.5 max-w-225 w-[90%] my-0 mx-auto">
         <h2>LOADING …</h2>
       </div>
     );
   }
-  if (!data) {
+  if (!currentData) {
     throw new Error("Past orders could not be loaded");
   }
   return (
@@ -58,7 +54,7 @@ function PastOrdersRoute() {
           </tr>
         </thead>
         <tbody>
-          {data.map((order) => (
+          {currentData.map((order) => (
             <tr
               className="border-b border-[#dddddd] even:bg-[#f6fef0] last:border-b-2 last:border-secondary"
               key={order.order_id}
@@ -88,7 +84,7 @@ function PastOrdersRoute() {
         <div className="font-pacifico text-primary text-[20px]">{page}</div>
         <button
           className="btn"
-          disabled={data.length < 10}
+          disabled={currentData?.length < 10}
           onClick={() => setPage(page + 1)}
         >
           Next
