@@ -2,7 +2,8 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { expect, test, vi } from "vitest";
 import createFetchMock from "vitest-fetch-mock";
 import { Route } from "../routes/order.lazy";
-import { CartContext } from "../contexts";
+import { Provider } from "react-redux";
+import { store } from "../store";
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -26,9 +27,9 @@ test("Add to cart button append item to cart", async () => {
     throw new Error("order route has no component");
   }
   render(
-    <CartContext.Provider value={[[], setCartMock]}>
+    <Provider store={store}>
       <OrderRoute />
-    </CartContext.Provider>,
+    </Provider>,
   );
 
   const pizzaOption = await screen.findByRole(
@@ -44,7 +45,9 @@ test("Add to cart button append item to cart", async () => {
   const addToCartBtn = screen.getByRole("button", { name: "Add to Cart" });
   fireEvent.click(addToCartBtn);
 
-  expect(setCartMock).toHaveBeenCalledWith([
+  const cartItems = store.getState().cart.items;
+
+  expect(cartItems).toEqual([
     {
       pizza: mockPizzas[0],
       size: "S",

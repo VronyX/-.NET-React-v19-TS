@@ -1,7 +1,7 @@
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, expect, test } from "vitest";
 import type { Pizza } from "../APIResponsesTypes";
-import type { CartItem } from "../contexts";
+import type { CartItem } from "../cartSlice";
 import Cart from "../Cart";
 
 afterEach(cleanup);
