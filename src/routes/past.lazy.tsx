@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { skipToken, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { skipToken } from "@reduxjs/toolkit/query/react";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import type { PastOrderDetail } from "../APIResponsesTypes";
 import getPastOrders from "../api/getPastOrders";
-import getPastOrder from "../api/getPastOrder";
 import Modal from "../Modal";
 import ErrorBoundary from "../ErrorBoundary";
+import { useGetPastOrderQuery } from "../api/pizzaApi";
 
 const sizeTDClass = "py-3 px-3.75 text-center";
 
@@ -35,12 +35,7 @@ function PastOrdersRoute() {
     staleTime: 30000,
   });
 
-  const { data: pastOrderData } = useQuery<PastOrderDetail>({
-    queryKey: ["past-order", focusedOrder],
-    queryFn: focusedOrder ? () => getPastOrder(focusedOrder) : skipToken,
-    enabled: !!focusedOrder,
-    staleTime: 24 * 60 * 60 * 1000, // one day in milliseconds,
-  });
+  const { data: pastOrderData } = useGetPastOrderQuery(focusedOrder ?? skipToken);
 
   if (isLoading) {
     return (
@@ -69,7 +64,10 @@ function PastOrdersRoute() {
               key={order.order_id}
             >
               <td className={sizeTDClass}>
-                <button className="btn" onClick={() => setFocusedOrder(order.order_id)}>
+                <button
+                  className="btn"
+                  onClick={() => setFocusedOrder(order.order_id)}
+                >
                   {order.order_id}
                 </button>
               </td>
@@ -80,11 +78,19 @@ function PastOrdersRoute() {
         </tbody>
       </table>
       <div className="flex items-center justify-evenly">
-        <button className="btn" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+        <button
+          className="btn"
+          disabled={page <= 1}
+          onClick={() => setPage(page - 1)}
+        >
           Previous
         </button>
         <div className="font-pacifico text-primary text-[20px]">{page}</div>
-        <button className="btn" disabled={data.length < 10} onClick={() => setPage(page + 1)}>
+        <button
+          className="btn"
+          disabled={data.length < 10}
+          onClick={() => setPage(page + 1)}
+        >
           Next
         </button>
       </div>
@@ -105,9 +111,16 @@ function PastOrdersRoute() {
               </thead>
               <tbody>
                 {pastOrderData.orderItems.map((pizza) => (
-                  <tr className="border-b border-[#dddddd] bg-[#f6fef0] last:border-b-2 last:border-secondary" key={`${pizza.pizzaTypeId}_${pizza.size}`}>
+                  <tr
+                    className="border-b border-[#dddddd] bg-[#f6fef0] last:border-b-2 last:border-secondary"
+                    key={`${pizza.pizzaTypeId}_${pizza.size}`}
+                  >
                     <td className={sizeTDClass}>
-                      <img className="w-12.5" src={pizza.image} alt={pizza.name} />
+                      <img
+                        className="w-12.5"
+                        src={pizza.image}
+                        alt={pizza.name}
+                      />
                     </td>
                     <td className={sizeTDClass}>{pizza.name}</td>
                     <td className={sizeTDClass}>{pizza.size}</td>
