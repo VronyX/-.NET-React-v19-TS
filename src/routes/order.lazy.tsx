@@ -1,4 +1,4 @@
-import {  useEffect, useState } from "react";
+import {  useState } from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import Cart from "../Cart";
 import Pizza from "../Pizza";
@@ -6,6 +6,7 @@ import type { Pizza as PizzaType, PizzaSize } from "../APIResponsesTypes";
 import { useAppDispatch, useAppSelector } from "../hooks";  
 import { addToCart, clearCart, selectCartItems } from "../cartSlice";
 import { setPizzaType, setPizzaSize, selectPizzaType, selectPizzaSize } from "../orderSlice";
+import { useGetPizzasQuery } from "../api/pizzaApi";
 
 // shared by the three size radios: the label is the visible "card", the input is visually hidden
 const sizeLabelClass =
@@ -21,10 +22,11 @@ export const Route = createLazyFileRoute("/order")({
 });
 
 function Order() {
-  const [pizzaTypes, setPizzaTypes] = useState<PizzaType[]>([]);
+  const { data: pizzaTypes = [], isLoading: isLoadingPizzas } = useGetPizzasQuery();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const loading = isLoadingPizzas || isCheckingOut;
   const pizzaType = useAppSelector(selectPizzaType);
   const pizzaSize = useAppSelector(selectPizzaSize);
-  const [loading, setLoading] = useState(true);
   const cart = useAppSelector(selectCartItems);
   const dispatch = useAppDispatch();
 
@@ -37,19 +39,8 @@ function Order() {
       : undefined;
   }
 
-  useEffect(() => {
-    void fetchPizzaTypes();
-  }, []);
-
-  async function fetchPizzaTypes() {
-    const pizzasRes = await fetch("/api/pizzas");
-    const pizzasJson = (await pizzasRes.json()) as PizzaType[];
-    setPizzaTypes(pizzasJson);
-    setLoading(false);
-  }
-
   async function checkout() {
-    setLoading(true);
+    setIsCheckingOut(true);
 
     await fetch("/api/order", {
       method: "POST",
@@ -63,7 +54,7 @@ function Order() {
 
     dispatch(clearCart());
 
-    setLoading(false);
+    setIsCheckingOut(false);
   }
 
   return (
