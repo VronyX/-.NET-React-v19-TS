@@ -21,7 +21,6 @@ const mockPizzas = [
 test("Add to cart button append item to cart", async () => {
   fetchMocker.mockResponse(JSON.stringify(mockPizzas));
 
-  const setCartMock = vi.fn();
   const OrderRoute = Route.options.component;
   if (!OrderRoute) {
     throw new Error("order route has no component");

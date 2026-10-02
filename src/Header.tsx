@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { useContext } from "react";
 import { useAppSelector } from "./hooks";
 import { selectCartCount } from "./cartSlice";
 
