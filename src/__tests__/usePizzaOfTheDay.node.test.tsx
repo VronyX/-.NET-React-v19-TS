@@ -25,9 +25,11 @@ function makeStore() {
 
 function createWrapper() {
   const store = makeStore();
-  return ({ children }: { children: React.ReactNode }) => (
-    <Provider store={store}>{children}</Provider>
-  );
+  function Wrapper({ children }: { children: React.ReactNode }) {
+    return <Provider store={store}>{children}</Provider>;
+  }
+
+  return Wrapper;
 }
 
 const testPizza = {

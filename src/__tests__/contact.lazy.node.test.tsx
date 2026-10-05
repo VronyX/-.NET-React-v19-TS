@@ -1,13 +1,27 @@
 import { render } from "@testing-library/react";
-import { expect, test, vi } from "vitest";
+import { beforeEach, expect, test, vi } from "vitest";
 import createFetchMock from "vitest-fetch-mock";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { pizzaApi } from "../api/pizzaApi";
 import { Route } from "../routes/contact.lazy";
-
-const queryClient = new QueryClient();
+import { configureStore } from "@reduxjs/toolkit/react";
+import { Provider } from "react-redux";
 
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
+
+beforeEach(() => {
+  fetchMocker.resetMocks();
+});
+
+function makeStore() {
+  return configureStore({
+    reducer: {
+      [pizzaApi.reducerPath]: pizzaApi.reducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(pizzaApi.middleware),
+  });
+}
 
 test("can submit contact form", async () => {
   fetchMocker.mockResponse(JSON.stringify({ status: "ok" }));
@@ -16,14 +30,16 @@ test("can submit contact form", async () => {
     throw new Error("contact route has no component");
   }
   const screen = render(
-    <QueryClientProvider client={queryClient}>
+    <Provider store={makeStore()}>
       <ContactRoute />
-    </QueryClientProvider>,
+    </Provider>,
   );
 
   const nameInput = screen.getByPlaceholderText("Name") as HTMLInputElement;
   const emailInput = screen.getByPlaceholderText("Email") as HTMLInputElement;
-  const msgTextArea = screen.getByPlaceholderText("Message") as HTMLTextAreaElement;
+  const msgTextArea = screen.getByPlaceholderText(
+    "Message",
+  ) as HTMLTextAreaElement;
 
   const testData = {
     name: "Brian",
@@ -46,11 +62,13 @@ test("can submit contact form", async () => {
   const requests = fetchMocker.requests();
   expect(requests.length).toBe(1);
   expect(requests[0].url).toBe("/api/contact");
-  expect(fetchMocker).toHaveBeenCalledWith("/api/contact", {
-    body: JSON.stringify(testData),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-  });
+  expect(requests[0].method).toBe("POST");
+  expect(requests[0].headers.get("Content-Type")).toBe("application/json");
+
+  const reqBody = (await requests[0].json()) as {
+    name: string;
+    email: string;
+    message: string;
+  };
+  expect(reqBody).toEqual(testData);
 });

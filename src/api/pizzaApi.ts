@@ -2,6 +2,12 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { PastOrder, PastOrderDetail, Pizza } from "../APIResponsesTypes";
 import type { CartItem } from "../cartSlice";
 
+export interface ContactMessage {
+  name: string;
+  email: string;
+  message: string;
+}
+
 export const pizzaApi = createApi({
   reducerPath: "pizzaApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api" }),
@@ -30,6 +36,13 @@ export const pizzaApi = createApi({
       }),
       invalidatesTags: ["PastOrders"],
     }),
+    placeContact: build.mutation<unknown, ContactMessage>({
+      query: (contact) => ({
+        url: "contact",
+        method: "POST",
+        body: contact,
+      }),
+    }),
   }),
 });
 
@@ -39,4 +52,5 @@ export const {
   useGetPastOrderQuery,
   useGetPastOrdersQuery,
   usePlaceOrderMutation,
+  usePlaceContactMutation,
 } = pizzaApi;
