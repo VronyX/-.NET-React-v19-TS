@@ -2,7 +2,7 @@
 
 import { refresh } from "next/cache";
 import { addRating, pizzaExists, toggleFavorite } from "@/lib/data";
-import { shouldFail, simulateLatency } from "@/lib/demo";
+import { shouldFail } from "@/lib/demo";
 import { parseStars } from "@/lib/format";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
@@ -15,7 +15,7 @@ export async function toggleFavoriteAction(
     return { ok: false, error: "Pizza tidak dikenal." };
   }
 
-  await simulateLatency("write");
+  // await simulateLatency("write");
   if (await shouldFail()) {
     return { ok: false, error: "Gagal menyimpan favorit. Coba lagi." };
   }
@@ -40,7 +40,7 @@ export async function ratePizzaAction(
     return { ok: false, error: "Rating tidak valid." };
   }
 
-  await simulateLatency("write");
+  // await simulateLatency("write");
   if (await shouldFail()) {
     return { ok: false, error: "Gagal mengirim rating. Coba lagi." };
   }
