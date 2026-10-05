@@ -1,12 +1,16 @@
-import {  useState } from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import Cart from "../Cart";
 import Pizza from "../Pizza";
 import type { Pizza as PizzaType, PizzaSize } from "../APIResponsesTypes";
-import { useAppDispatch, useAppSelector } from "../hooks";  
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { addToCart, clearCart, selectCartItems } from "../cartSlice";
-import { setPizzaType, setPizzaSize, selectPizzaType, selectPizzaSize } from "../orderSlice";
-import { useGetPizzasQuery } from "../api/pizzaApi";
+import {
+  setPizzaType,
+  setPizzaSize,
+  selectPizzaType,
+  selectPizzaSize,
+} from "../orderSlice";
+import { useGetPizzasQuery, usePlaceOrderMutation } from "../api/pizzaApi";
 
 // shared by the three size radios: the label is the visible "card", the input is visually hidden
 const sizeLabelClass =
@@ -22,9 +26,10 @@ export const Route = createLazyFileRoute("/order")({
 });
 
 function Order() {
-  const { data: pizzaTypes = [], isLoading: isLoadingPizzas } = useGetPizzasQuery();
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const loading = isLoadingPizzas || isCheckingOut;
+  const { data: pizzaTypes = [], isLoading: isLoadingPizzas } =
+    useGetPizzasQuery();
+  const [placeOrder, { isLoading: isPlacingOrder }] = usePlaceOrderMutation();
+  const loading = isLoadingPizzas || isPlacingOrder;
   const pizzaType = useAppSelector(selectPizzaType);
   const pizzaSize = useAppSelector(selectPizzaSize);
   const cart = useAppSelector(selectCartItems);
@@ -40,21 +45,8 @@ function Order() {
   }
 
   async function checkout() {
-    setIsCheckingOut(true);
-
-    await fetch("/api/order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        cart,
-      }),
-    });
-
+    await placeOrder(cart);
     dispatch(clearCart());
-
-    setIsCheckingOut(false);
   }
 
   return (
@@ -68,7 +60,9 @@ function Order() {
             if (!selectedPizza || !price) {
               return;
             }
-            dispatch(addToCart({ pizza: selectedPizza, size: pizzaSize, price }));
+            dispatch(
+              addToCart({ pizza: selectedPizza, size: pizzaSize, price }),
+            );
           }}
         >
           <div className="my-2.5 w-full border-b border-border p-3.75 text-center md:border-r md:border-b-0">
@@ -103,7 +97,9 @@ function Order() {
                 <span>
                   <input
                     className="peer sr-only"
-                    onChange={(e) => dispatch(setPizzaSize(e.target.value as PizzaSize))}
+                    onChange={(e) =>
+                      dispatch(setPizzaSize(e.target.value as PizzaSize))
+                    }
                     checked={pizzaSize === "S"}
                     type="radio"
                     name="pizza-size"
@@ -117,7 +113,9 @@ function Order() {
                 <span>
                   <input
                     className="peer sr-only"
-                    onChange={(e) => dispatch(setPizzaSize(e.target.value as PizzaSize))}
+                    onChange={(e) =>
+                      dispatch(setPizzaSize(e.target.value as PizzaSize))
+                    }
                     checked={pizzaSize === "M"}
                     type="radio"
                     name="pizza-size"
@@ -131,7 +129,9 @@ function Order() {
                 <span>
                   <input
                     className="peer sr-only"
-                    onChange={(e) => dispatch(setPizzaSize(e.target.value as PizzaSize))}
+                    onChange={(e) =>
+                      dispatch(setPizzaSize(e.target.value as PizzaSize))
+                    }
                     checked={pizzaSize === "L"}
                     type="radio"
                     name="pizza-size"
