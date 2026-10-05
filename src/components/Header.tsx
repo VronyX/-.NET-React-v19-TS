@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { getFavoriteIds } from "@/lib/data";
 
+// count pill component untuk menampilkan jumlah favorit. Ini adalah komponen presentasi sederhana yang hanya menerima children dan menampilkannya di dalam span dengan styling tertentu.
 function CountPill({ children }: { children: React.ReactNode }) {
   return (
     <span

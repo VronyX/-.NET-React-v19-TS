@@ -12,19 +12,25 @@ export default function FavoriteButton({
   pizzaName: string;
   favoriteIdsPromise: Promise<string[]>;
 }) {
-  // The server's truth: streamed in, refreshed after every successful action
+  // isFavorite menyimpan nilai asli dari server, yang diperoleh dari favoriteIdsPromise. Nilai ini akan digunakan untuk menentukan apakah pizza saat ini sudah menjadi favorit atau belum.
   const isFavorite = use(favoriteIdsPromise).includes(pizzaId);
-  // What we show while the action is in flight
+  // optimisticFavorite menyimpan nilai favorit yang bersifat optimis. Nilai ini akan diubah secara langsung ketika pengguna mengklik tombol favorit, sehingga UI akan segera menampilkan perubahan sebelum aksi server selesai.
   const [optimisticFavorite, setOptimisticFavorite] = useOptimistic(isFavorite);
+  // isPending menyimpan status transisi, yang akan menjadi true ketika aksi toggleFavoriteAction sedang berlangsung. startTransition digunakan untuk menandai bahwa kita akan melakukan update state yang bersifat transisi.
   const [isPending, startTransition] = useTransition();
+  // isError menyimpan status error, yang akan menjadi true jika aksi toggleFavoriteAction gagal. setError digunakan untuk mengatur nilai error ketika aksi gagal.
   const [error, setError] = useState<string | null>(null);
 
+  // penjelasan singkat: handleClick akan dipanggil ketika tombol favorit diklik. Fungsi ini akan mengatur error menjadi null, kemudian memulai transisi untuk mengubah status favorit secara optimis. Jika aksi toggleFavoriteAction gagal, error akan diatur dengan pesan error yang diterima.
   function handleClick() {
+    // setError(null) untuk menghapus error sebelumnya sebelum memulai aksi baru.
     setError(null);
+    // startTransition digunakan untuk menandai bahwa kita akan melakukan update state yang bersifat transisi. Ini memungkinkan React untuk menunda rendering hingga aksi selesai, sehingga UI tetap responsif.
     startTransition(async () => {
+      // setOptimisticFavorite(!optimisticFavorite) untuk mengubah status favorit secara optimis. Ini berarti UI akan langsung menampilkan perubahan sebelum aksi server selesai.
       setOptimisticFavorite(!optimisticFavorite);
       const result = await toggleFavoriteAction(pizzaId);
-      // On failure the transition ends, so the heart snaps back by itself
+      // jika gagal, kita mengembalikan status favorit ke nilai sebelumnya dengan setOptimisticFavorite(!optimisticFavorite). Ini memastikan bahwa UI tetap konsisten dengan status server jika aksi gagal.
       if (!result.ok) setError(result.error);
     });
   }
