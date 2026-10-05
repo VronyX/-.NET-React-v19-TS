@@ -1,7 +1,7 @@
 import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { all, get, run } from "./db";
-// import { simulateLatency } from "./demo";
+import { simulateLatency } from "./demo";
 import type { Pizza, PizzaSize, RatingSummary } from "./types";
 
 interface PizzaRow {
@@ -48,7 +48,7 @@ export async function getPizzas(): Promise<Pizza[]> {
 }
 
 export async function getPizza(id: string): Promise<Pizza | null> {
-  // await simulateLatency("read");
+  await simulateLatency("read");
   const row = await get<PizzaRow>(
     `SELECT ${PIZZA_COLUMNS} FROM pizza_types WHERE pizza_type_id = ?`,
     [id],
@@ -70,7 +70,7 @@ export async function pizzaExists(id: string): Promise<boolean> {
 }
 
 export async function getFavoriteIds(): Promise<string[]> {
-  // await simulateLatency("read");
+  await simulateLatency("read");
   const rows = await all<{ id: string }>(
     "SELECT pizza_type_id AS id FROM favorites",
   );
@@ -92,7 +92,7 @@ export async function toggleFavorite(id: string): Promise<boolean> {
 }
 
 export async function getRatingSummary(id: string): Promise<RatingSummary> {
-  // await simulateLatency("read");
+  await simulateLatency("read");
   const row = await get<{ average: number | null; count: number }>(
     "SELECT AVG(stars) AS average, COUNT(*) AS count FROM ratings WHERE pizza_type_id = ?",
     [id],

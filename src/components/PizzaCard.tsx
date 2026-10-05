@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import FavoriteButton from "@/components/FavoriteButton";
 import { formatPrice, lowestPrice } from "@/lib/format";
 import type { Pizza } from "@/lib/types";
-import { Suspense } from "react";
 
 export default function PizzaCard({
   pizza,
